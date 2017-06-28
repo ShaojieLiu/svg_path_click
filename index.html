@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>svg_path_click</title>
+        <style media="screen">
+            svg{
+                border: 1px dashed hotpink;
+            }
+        </style>
+    </head>
+    <body>
+
+        <svg id='svg1' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" fill-rule="evenodd" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" overflow="hidden" preserveAspectRatio="none" style="position: absolute; top: 0px; left: 0px;" width="601px" height="566px" >
+
+                 <g id="rect1-1">
+                       <g>
+                          <path id='path-rect1' fill="#EEEEEE" fill-opacity="1" stroke="#595959" stroke-opacity="1" stroke-width="3" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="8" d="M 164 73 L 215 73 215 105 164 105 Z"></path>
+                       </g>
+                 </g>
+                 <g id="tri1-2">
+                       <g>
+                          <path id='path-triangle1' fill="#EEEEEE" fill-opacity="1" stroke="#595959" stroke-opacity="1" stroke-width="3" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="8" d="M 63 143 L 63 48 253 143 Z"></path>
+                       </g>
+                 </g>
+
+        </svg>
+
+        <svg id='svg2' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" fill-rule="evenodd" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" overflow="hidden" preserveAspectRatio="none" style="position: absolute; top: 0px; left: 0px;" width="300px" height="566px">
+            <g id="tri2-1">
+                  <g>
+                     <path id='path-triangle2' fill="#EEEEEE" fill-opacity="1" stroke="#595959" stroke-opacity="1" stroke-width="3" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="8" d="M 63 143 L 0 48 153 143 Z"></path>
+                  </g>
+            </g>
+        </svg>
+
+<script src="https://cdn.bootcss.com/snap.svg/0.5.1/snap.svg-min.js"></script>
+
+<script type="text/javascript">
+
+var e = function(sel) {return document.querySelector(sel)}
+var es = function(sel) {return Array.from(document.querySelectorAll(sel))}
+var log = function(...arg) {console.log.apply(console, arg)}
+
+var rectG = e('#rect1-1')
+var triG = e('#tri1-2')
+var triG2 = e('#tri2-1')
+
+var rectP = e('#path-rect1')
+var triP = e('#path-triangle1')
+var triP2 = e('#path-triangle2')
+
+rectP.__proto__.getPathStr = function() {
+    return this.attributes.d.value
+}
+// var svg = e('#svg')
+
+// rectG.addEventListener('click', function() {
+//     console.log('rect clicked!')
+// })
+// triG.addEventListener('click', function() {
+//     console.log('triangle clicked!')
+// }, true)
+// triG2.addEventListener('click', function() {
+//     console.log('triangle2 clicked!')
+// })
+
+// document.body.addEventListener('click', function(ev) {
+//     console.log(ev.target.id)
+// })
+
+// svg.addEventListener('click', function() {
+//     console.log('svg clicked!')
+// })
+
+console.log('debug path', rectP.__proto__, typeof triP.value)
+
+
+var judge = function(ev) {
+    log('')
+    var x = ev.clientX,
+        y = ev.clientY
+    var inRectP = Snap.path.isPointInside(rectP.getPathStr(), x, y)
+    var inTriP = Snap.path.isPointInside(triP.getPathStr(), x, y)
+    var inTriP2 = Snap.path.isPointInside(triP2.getPathStr(), x, y)
+
+    var dict = [
+        {in: inRectP, ele: rectP},
+        {in: inTriP, ele: triP},
+        {in: inTriP2, ele: triP2},
+    ]
+
+    var shine = function(ele) {
+        var temp = ele.attributes.fill.value
+        ele.attributes.fill.value = '#ee7777'
+        setTimeout(function() {
+            ele.attributes.fill.value = temp
+        },500)
+    }
+
+    dict.forEach(function(ele) {
+        if(ele.in) {shine(ele.ele)}
+    })
+}
+
+e('body').addEventListener('click', judge)
+
+</script>
+    </body>
+</html>
