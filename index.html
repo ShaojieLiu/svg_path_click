@@ -33,22 +33,18 @@
               </g>
         </g>
     </svg>
-    <svg id='svg4' version="1.1" fill-rule="evenodd" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" overflow="hidden" preserveAspectRatio="none" style="position: absolute; top: 0px; left: 0px;" width="150px" height="200px">
+    <!-- <svg id='svg4' version="1.1" fill-rule="evenodd" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" overflow="hidden" preserveAspectRatio="none" style="position: absolute; top: 0px; left: 0px;" width="150px" height="200px"
+        transform='translate(0, 0) rotate(30)'
+    > -->
+    <svg id='svg4' version="1.1" fill-rule="evenodd" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" overflow="hidden" preserveAspectRatio="none" style="position: absolute; top: 0px; left: 0px;" width="150px" height="200px"
+
+    >
         <g>
               <g>
                  <path id='path-stroke1' fill-rule="evenodd" fill="none" fill-opacity="1" stroke="#595959" stroke-opacity="1" stroke-width="8" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="8" d="M 30 30 L 120 30 120 100 30 100 Z" data-d="M 26 26 L 124 26 124 104 26 104 M 34 34 L 116 34 116 96  34 96 Z"></path>
               </g>
         </g>
     </svg>
-    <!-- <svg id='svg5' version="1.1" fill-rule="evenodd" fill="none" stroke="none" stroke-linecap="square" stroke-miterlimit="10" overflow="hidden" preserveAspectRatio="none" style="position: absolute; top: 0px; left: 0px;" width="150px" height="200px">
-        <g>
-              <g>
-                 <path id='path-stroke2'  fill-rule="evenodd" fill="#226622" fill-opacity="0.5" stroke="#222266" stroke-opacity="0.5" stroke-width="1" stroke-linecap="butt" stroke-linejoin="round" stroke-miterlimit="8"
-                 d="M 26 26 L 124 26 124 104 26 104
-                    M 34 34 L 116 34 116 96  34 96 Z"></path>
-              </g>
-        </g>
-    </svg> -->
 </div>
 
 
@@ -77,8 +73,8 @@ var triP2 = e('#path-triangle2')
 var strokeP1 = e('#path-stroke1')
 var eleArr = [rectP, triP, triP2, strokeP1]
 
-log(strokeP1.__proto__)
-log(strokeP1.dataset.d, strokeP1.getBBox().width)
+// log(strokeP1.__proto__)
+// log(strokeP1.dataset.d, strokeP1.getBBox().width)
 
 var pathPrototype = rectP.__proto__
 pathPrototype.getStrokeArea = function() {
@@ -90,6 +86,7 @@ pathPrototype.getPathStr = function() {
     return this.attributes.fill.value !== 'none' ? this.attributes.d.value : this.getStrokeArea()
 }
 pathPrototype.isPointIn = function(x, y) {
+    // console.log('pathStr', this.getPathStr())
     return Snap.path.isPointInside(this.getPathStr(), x, y)
 }
 pathPrototype.dadIndex = function() {
@@ -117,6 +114,9 @@ var judge = function(ev) {
         y = ev.clientY
 
     eleArr.filter(function(ele) {
+        const pathStr = ele.attributes.d.value
+        console.log('ele', ele, pathStr, Snap.path.getBBox(pathStr))
+
         return ele.isPointIn(x, y)
     }).reduce(function(prev, curr) {
         return prev.dadIndex() > curr.dadIndex() ? prev : curr
